@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { filterPlayers, allPlayers } from './app2'
+import { allPlayers, allTeams } from './app2'
 
 
 function App() {
@@ -11,11 +11,11 @@ function App() {
   return (
     <>
       <div>
-        <button onClick={() => filterPlayers()}>
-          FilterPlayers 
+        <button onClick={() => allTeams()}>
+          AllTeams 
         </button>
         <button onClick={() => allPlayers()}>
-          Test 
+          AllPlayers 
         </button>
       </div>
       <p className="read-the-docs">

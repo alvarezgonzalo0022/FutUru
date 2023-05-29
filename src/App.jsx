@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { filterPlayers, test } from './app2'
+import { filterPlayers, allPlayers } from './app2'
 
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <button onClick={() => filterPlayers()}>
           FilterPlayers 
         </button>
-        <button onClick={() => test()}>
+        <button onClick={() => allPlayers()}>
           Test 
         </button>
       </div>

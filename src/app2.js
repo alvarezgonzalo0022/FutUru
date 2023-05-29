@@ -61,7 +61,7 @@ export const filterPlayers = (data) => {
     return players;
 }
 
-export const AllPlayers = async () => {
+export const allPlayers = async () => {
 
     const leagues = Leagues;
     const leaguesToUse = leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);
@@ -80,7 +80,7 @@ export const AllPlayers = async () => {
 
 }
 
-export const AllTeams = async () => {
+export const allTeams = async () => {
     const leagues = Leagues;
     const leaguesToUse = leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);
 

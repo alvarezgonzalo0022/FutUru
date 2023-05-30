@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Leagues } from "./data";
+import { RapidAPIHost, RapidAPIKey } from "../env";
 
 export const fetchTeamsByLeagueAndSeason = async (leagueID, season) => {
     const options = {
@@ -10,8 +11,8 @@ export const fetchTeamsByLeagueAndSeason = async (leagueID, season) => {
             season: season
         },
         headers: {
-            'X-RapidAPI-Key': process.env.RapidAPIKey,
-            'X-RapidAPI-Host': process.env.RapidAPIHost
+            'X-RapidAPI-Key': RapidAPIKey,
+            'X-RapidAPI-Host': RapidAPIHost
         }
     };
 
@@ -32,8 +33,8 @@ export const fetchPlayersByTeamAndSeason = async (teamID, season) => {
             season: season
         },
         headers: {
-            'X-RapidAPI-Key': process.env.RapidAPIKey,
-            'X-RapidAPI-Host': process.env.RapidAPIHost
+            'X-RapidAPI-Key': RapidAPIKey,
+            'X-RapidAPI-Host': RapidAPIHost
         }
     };
 
@@ -60,47 +61,91 @@ export const filterPlayers = (data) => {
 }
 
 export const allPlayers = async () => {
-
-    // crear variable para aumentar la liga a 270 cuando termine el apertura y otra variable para subir la season, arrancando desde 2012 hasta 2022
-    let league = 0;
-    let season = 2012;
-
     const leaguesToUse = Leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);
+  
+    let league = 0;
+    let season = leaguesToUse[league].seasons[0].year;
+    let max_season = leaguesToUse[league].seasons[leaguesToUse[league].seasons.length - 1].year;
+    let allPlayers = [];
+  
+    for (league; league < 2; league++) {
 
-    const teams = await fetchTeamsByLeagueAndSeason(leaguesToUse[0].league.id, 2012);
+        season = leaguesToUse[league].seasons[0].year;
+        max_season = leaguesToUse[league].seasons[leaguesToUse[league].seasons.length - 1].year;
 
-    const players = teams.response.map(async team => {
-        console.log(team.team.id);
-        const playersBySquad = await fetchPlayersByTeamAndSeason(team.team.id, 2012);
-        return playersBySquad;
-    });
+        for (season; season <= max_season; season++) {
+            const teams = await fetchTeamsByLeagueAndSeason(leaguesToUse[league].league.id, season);
 
-    const filteredPlayers = filterPlayers(players);
-
-    console.log(filteredPlayers);
-
-}
+            const playersByTeamAndSeason = teams.response.map(async team => {
+                const players = await fetchPlayersByTeamAndSeason(team.team.id, season);
+                return players;
+            });
+            allPlayers.push(playersByTeamAndSeason);
+        }
+    }
+  
+    // Flatten the array of arrays
+    const flattenedPlayers = allPlayers.flat();
+  
+    // Save allPlayers to a file
+    const blob = new Blob([JSON.stringify(flattenedPlayers)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'allPlayers.json';
+  
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  
+    console.log('allPlayers saved to file.');
+  };
+  
 
 export const allTeams = async () => {
+  const leaguesToUse = Leagues.response.filter(
+    league => league.league.id === 268 || league.league.id === 270
+  );
 
-    // crear variable para aumentar la liga a 270 cuando termine el apertura y otra variable para subir la season, arrancando desde 2012 hasta 2022
-    let league = 0;
-    let season = 2012;
+  let league = 0;
+  let season = leaguesToUse[league].seasons[0].year;
+  let max_season = leaguesToUse[league].seasons[leaguesToUse[league].seasons.length - 1].year;
+  let allTeams = [];
 
-    const leaguesToUse = Leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);
-    
-    const teams = fetchTeamsByLeagueAndSeason(leaguesToUse[league].league.id, season);
+  for (league; league < 2; league++) {
+    season = leaguesToUse[league].seasons[0].year;
+    max_season = leaguesToUse[league].seasons[leaguesToUse[league].seasons.length - 1].year;
 
-    const allTeams = teams.map(team => {
-        return {
-            name: team.team.name,
-            code: team.team.code,
-            logo: team.team.logo,
-            founded: team.team.founded,
-            city: team.venue.city,
-            stadium: team.venue.name,
-        }
-    });
+    for (season; season <= max_season; season++) {
+      const teams = await fetchTeamsByLeagueAndSeason(leaguesToUse[league].league.id, season);
 
-    console.log(allTeams);
-}
+      teams.response.forEach(team => {
+        allTeams.push({
+          name: team.team.name,
+          code: team.team.code || 'No tiene',
+          logo: team.team.logo,
+          founded: team.team.founded,
+          city: team.venue.city,
+          stadium: team.venue.name,
+        });
+      });
+    }
+  }
+
+  // Save allTeams to a file
+  const blob = new Blob([JSON.stringify(allTeams)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'allTeams.json';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  console.log('allTeams saved to file.');
+
+  return allTeams;
+};

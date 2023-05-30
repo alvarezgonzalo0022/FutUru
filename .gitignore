@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 env.js
+allPlayersApertura.js
+allPlayersClausura.js
+allFilteredPlayersApertura.js
+allFilteredPlayersClausura.js

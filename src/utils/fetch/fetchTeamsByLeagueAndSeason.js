@@ -1,12 +1,12 @@
-import { RapidAPIKey, RapidAPIHost } from '../../env.js';
+import { RapidAPIKey, RapidAPIHost } from '../../../env.js';
 import axios from 'axios';
 
-export const fetchPlayersByTeamAndSeason = async (teamID, season) => {    
+export const fetchTeamsByLeagueAndSeason = async (leagueID, season) => {
     const options = {
         method: 'GET',
-        url: 'https://api-football-v1.p.rapidapi.com/v3/players',
+        url: 'https://api-football-v1.p.rapidapi.com/v3/teams',
         params: {
-            team: teamID,
+            league: leagueID,
             season: season
         },
         headers: {

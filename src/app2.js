@@ -1,7 +1,6 @@
-import axios from "axios";
 import { Leagues } from "./data";
-import { fetchTeamsByLeagueAndSeason } from "./utils/fetchTeamsByLeagueAndSeason";
-import { fetchPlayersByTeamAndSeason } from "./utils/fetchPlayersByTeamAndSeason";
+import { fetchTeamsByLeagueAndSeason } from "./utils/fetch/fetchTeamsByLeagueAndSeason";
+import { fetchPlayersByTeamAndSeason } from "./utils/fetch/fetchPlayersByTeamAndSeason";
 import { getOnlyPlayers } from "./utils/getOnlyPlayers";
 import { normalizePlayers } from "./utils/normalizePlayers";
 
@@ -68,7 +67,6 @@ export const allPlayersClausura = async (league) => {
     return allPlayersToReturn;
 };
 
-
 export const fetchPlayersClausura = async () => {
     const leagueToUse = Leagues.response.filter(league => league.league.id === 270);
 
@@ -85,8 +83,7 @@ export const fetchPlayersClausura = async () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
-  
+} 
 
 export const allTeams = async () => {
   const leaguesToUse = Leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);

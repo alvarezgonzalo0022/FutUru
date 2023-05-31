@@ -1,5 +1,5 @@
 import './App.css'
-import { allPlayersApertura, allPlayersClausura, allTeams, fetchPlayersApertura, getOnlyPlayersApertura, getOnlyPlayersClausura } from './app2'
+import { allTeams, fetchPlayersApertura, fetchPlayersClausura } from './app2'
 
 
 function App() {
@@ -9,26 +9,11 @@ function App() {
         <button onClick={() => allTeams()}>
           AllTeams
         </button>
-        <button onClick={() => allPlayersApertura()}>
-          AllPlayersApertura
-        </button>
-        <button onClick={() => filterAllPlayersApertura()}>
-          FilterAllPlayersApertura
-        </button>
-        <button onClick={() => allPlayersClausura()}>
-          AllPlayersClausura
-        </button>
-        <button onClick={() => getOnlyPlayersApertura()}>
-          GetApertura
-        </button>
-        <button onClick={() => filterAllPlayersClausura()}>
-          FilterAllPlayersClausura
-        </button>
-        <button onClick={() => getOnlyPlayersClausura()}>
-          GetClausura
-        </button>
         <button onClick={() => fetchPlayersApertura()}>
           Get All Players Apertura
+        </button>
+        <button onClick={() => fetchPlayersClausura()}>
+          Get All Players Clausura
         </button>
       </div>
       <p className="read-the-docs">

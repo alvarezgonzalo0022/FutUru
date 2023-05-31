@@ -102,7 +102,7 @@ export const fetchPlayersApertura = async () => {
     const leagueToUse = Leagues.response.filter(league => league.league.id === 268);
 
     const allPlayers = await allPlayersApertura(leagueToUse[0]);
-    const getOnlyPlayers = await getOnlyPlayersApertura(allPlayers);
+    const getOnlyPlayers = getOnlyPlayersApertura(allPlayers);
 
     const blob = new Blob([JSON.stringify(getOnlyPlayers)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);

@@ -3,6 +3,7 @@ import { fetchTeamsByLeagueAndSeason } from "./utils/fetch/fetchTeamsByLeagueAnd
 import { fetchPlayersByTeamAndSeason } from "./utils/fetch/fetchPlayersByTeamAndSeason";
 import { getOnlyPlayers } from "./utils/getOnlyPlayers";
 import { normalizePlayers } from "./utils/normalizePlayers";
+import { getNationalitiesOfPlayers } from "./utils/getNationalitiesOfPlayers";
 
 export const allPlayersApertura = async (league) => {
     let season = league.seasons[0].year;
@@ -32,6 +33,7 @@ export const fetchPlayersApertura = async () => {
 
     const allPlayers = await allPlayersApertura(leagueToUse[0]);
     const onlyPlayers = getOnlyPlayers(allPlayers);
+    getNationalitiesOfPlayers(allPlayers, 'Apertura');
 
     const blob = new Blob([JSON.stringify(onlyPlayers)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -72,6 +74,7 @@ export const fetchPlayersClausura = async () => {
 
     const allPlayers = await allPlayersApertura(leagueToUse[0]);
     const onlyPlayers = getOnlyPlayers(allPlayers);
+    getNationalitiesOfPlayers(allPlayers, 'Clausura');
 
     const blob = new Blob([JSON.stringify(onlyPlayers)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);

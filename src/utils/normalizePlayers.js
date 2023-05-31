@@ -7,6 +7,7 @@ export const normalizePlayers = (data) => {
                 team: player.statistics[0].team.name,
                 position: player.statistics[0].games.position,
                 playerImg: player.player.photo,
+                nationality: player.player.nationality,
             }
         })
         return responses;

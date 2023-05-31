@@ -1,10 +1,6 @@
 import axios from "axios";
 import { Leagues } from "./data";
 import { RapidAPIHost, RapidAPIKey } from "../env";
-import { allPlayersApertura2 } from "../allPlayersApertura";
-import { allPlayersClausura2 } from "../allPlayersClausura";
-import { arrayAperturaToNormalize } from "../allFilteredPlayersApertura";
-import { arrayClausuraToNormalize } from "../allFilteredPlayersClausura";
 
 export const fetchTeamsByLeagueAndSeason = async (leagueID, season) => {
     const options = {
@@ -51,7 +47,7 @@ export const fetchPlayersByTeamAndSeason = async (teamID, season) => {
 }
 
 
-export const filterPlayers = (data) => {
+export const normalizePlayers = (data) => {
 
     const players = data.map(response => {
         const responses = response.response.map(player => {
@@ -65,20 +61,16 @@ export const filterPlayers = (data) => {
         })
         return responses;
     });
-    console.log(players);
     return players;
 }
 
-export const allPlayersApertura = async () => {
-    const leaguesToUse = Leagues.response.filter(league => league.league.id === 268 || league.league.id === 270);
-  
-    let league = 0;
-    let season = leaguesToUse[league].seasons[0].year;
-    let max_season = leaguesToUse[league].seasons[leaguesToUse[league].seasons.length - 1].year;
+export const allPlayersApertura = async (league) => {
+    let season = league.seasons[0].year;
+    let max_season = league.seasons[league.seasons.length - 1].year;
     let allPlayers = [];
   
     for (season; season <= max_season; season++) {
-        const teams = await fetchTeamsByLeagueAndSeason(leaguesToUse[league].league.id, season);
+        const teams = await fetchTeamsByLeagueAndSeason(league.league.id, season);
 
         const playersByTeamAndSeason = await Promise.all(teams.response.map(async team => {
             const players = await fetchPlayersByTeamAndSeason(team.team.id, season);
@@ -87,57 +79,32 @@ export const allPlayersApertura = async () => {
         console.log(playersByTeamAndSeason);
         allPlayers.push(playersByTeamAndSeason);
     }
-  
-    console.log(allPlayers);
-  
-    // Save allPlayers to a file
-    const blob = new Blob([JSON.stringify(allPlayers)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-  
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'allPlayersApertura.json';
-  
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  
-    console.log('allPlayers saved to file.');
-};
 
-export const filterAllPlayersApertura = () => {
-    const players = allPlayersApertura2.map(player => {
-        return filterPlayers(player)
+    const allPlayersToReturn = allPlayers.map(player => {
+        return normalizePlayers(player)
     });
 
-    // Save allPlayers to a file
-    const blob = new Blob([JSON.stringify(players)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'allFilteredPlayersApertura.json';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    console.log('allPlayers saved to file.');
+    return allPlayersToReturn;
+  
+};
 
-}
-
-export const getOnlyPlayersApertura = () => {
+export const getOnlyPlayersApertura = (data) => {
     let players = [];
-    arrayAperturaToNormalize.forEach(season => {
+    data.forEach(season => {
         season.forEach(team => {
-           team.forEach(player => {
-                players.push(player);
-           })
+           team.forEach(player => players.push(player));
         })
     })
+    return players;
+}
 
-      // Save allTeams to a file
-    const blob = new Blob([JSON.stringify(players)], { type: 'application/json' });
+export const fetchPlayersApertura = async () => {
+    const leagueToUse = Leagues.response.filter(league => league.league.id === 268);
+
+    const allPlayers = await allPlayersApertura(leagueToUse[0]);
+    const getOnlyPlayers = await getOnlyPlayersApertura(allPlayers);
+
+    const blob = new Blob([JSON.stringify(getOnlyPlayers)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
@@ -206,7 +173,7 @@ export const filterAllPlayersClausura = () => {
     
     console.log('allPlayers saved to file.');
 
-}
+};
 
 export const getOnlyPlayersClausura = () => {
     let players = [];
@@ -229,7 +196,7 @@ export const getOnlyPlayersClausura = () => {
     document.body.removeChild(link);
 
     console.log('allTeams saved to file.');
-}
+};
   
 
 export const allTeams = async () => {

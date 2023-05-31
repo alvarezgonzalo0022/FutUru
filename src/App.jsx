@@ -1,5 +1,5 @@
 import './App.css'
-import { allPlayersApertura, allPlayersClausura, allTeams, getOnlyPlayersApertura, getOnlyPlayersClausura } from './app2'
+import { allPlayersApertura, allPlayersClausura, allTeams, fetchPlayersApertura, getOnlyPlayersApertura, getOnlyPlayersClausura } from './app2'
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         <button onClick={() => getOnlyPlayersClausura()}>
           GetClausura
         </button>
-        <button onClick={() => allPlayersApertura(0)}>
+        <button onClick={() => fetchPlayersApertura()}>
           Get All Players Apertura
         </button>
       </div>

@@ -1,15 +1,27 @@
-export const getNationalitiesOfPlayers = (data, league) => {
-    let nationalities = [];
+import { Nationalities } from "../data";
+
+export const getNationalitiesOfPlayers = async (data, league) => {
+    const allNationalities = Nationalities;
+
+    let nationalitiesOnTeams = [];
     data.forEach(season => {
         season.forEach(team => {
-            team.forEach(player => nationalities.push(player.nationality))
+            team.forEach(player => nationalitiesOnTeams.push(player.nationality))
         })
     });
-
-    const dataArr = new Set(nationalities);
+    const dataArr = new Set(nationalitiesOnTeams);
     const filteredNationalities = [...dataArr];
+    const nationalitiesObjects = [];
 
-    const blob = new Blob([JSON.stringify(filteredNationalities)], { type: 'application/json' });
+    for(let i = 0; i < filteredNationalities.length; i++) {
+        for(let y = 0; y < allNationalities.length; y++) {
+            if(filteredNationalities[i] === allNationalities[y].name) {
+                nationalitiesObjects.push(allNationalities[y]);
+            }
+        }
+    }
+
+    const blob = new Blob([JSON.stringify(nationalitiesObjects)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
@@ -19,5 +31,5 @@ export const getNationalitiesOfPlayers = (data, league) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    return nationalities;
+    return nationalitiesObjects;
 }

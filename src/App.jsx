@@ -1,5 +1,7 @@
 import './App.css'
 import { allTeams, fetchPlayersApertura, fetchPlayersClausura } from './app2'
+import { fetchAllCountries } from './utils/fetch/fetchAllCountries'
+import { getNationalitiesOfPlayers } from './utils/getNationalitiesOfPlayers'
 
 
 function App() {

@@ -4,6 +4,7 @@ import { fetchPlayersByTeamAndSeason } from "./utils/fetch/fetchPlayersByTeamAnd
 import { getOnlyPlayers } from "./utils/getOnlyPlayers";
 import { normalizePlayers } from "./utils/normalizePlayers";
 import { getNationalitiesOfPlayers } from "./utils/getNationalitiesOfPlayers";
+import { saveToJson } from "./utils/saveToJson";
 
 export const allPlayersApertura = async (league) => {
     let season = league.seasons[0].year;
@@ -35,16 +36,7 @@ export const fetchPlayersApertura = async () => {
     const onlyPlayers = getOnlyPlayers(allPlayers);
     getNationalitiesOfPlayers(allPlayers, 'Apertura');
 
-    const blob = new Blob([JSON.stringify(onlyPlayers)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'allPlayersApertura.json';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    saveToJson(onlyPlayers, 'allPlayersApertura');
 }
 
 export const allPlayersClausura = async (league) => {
@@ -76,16 +68,7 @@ export const fetchPlayersClausura = async () => {
     const onlyPlayers = getOnlyPlayers(allPlayers);
     getNationalitiesOfPlayers(allPlayers, 'Clausura');
 
-    const blob = new Blob([JSON.stringify(onlyPlayers)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'allPlayersClausura.json';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    saveToJson(onlyPlayers, 'allPlayersClausura');
 } 
 
 export const allTeams = async () => {
@@ -116,17 +99,7 @@ export const allTeams = async () => {
     }
   }
 
-  // Save allTeams to a file
-  const blob = new Blob([JSON.stringify(allTeams)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'allTeams.json';
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  saveToJson(allTeams, 'allTeams');
 
   return allTeams;
 };

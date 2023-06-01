@@ -1,4 +1,5 @@
 import { Nationalities } from "../data";
+import { saveToJson } from "./saveToJson";
 
 export const getNationalitiesOfPlayers = async (data, league) => {
     const allNationalities = Nationalities;
@@ -21,15 +22,7 @@ export const getNationalitiesOfPlayers = async (data, league) => {
         }
     }
 
-    const blob = new Blob([JSON.stringify(nationalitiesObjects)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+    saveToJson(nationalitiesObjects, `nationalities${league}`);
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `nationalities${league}.json`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
     return nationalitiesObjects;
 }

@@ -1256,7 +1256,7 @@ export const Nationalities = [
         "flag": "https://media-2.api-sports.io/flags/za.svg"
     },
     {
-        "name": "South-Korea",
+        "name": "Korea Republic",
         "code": "KR",
         "flag": "https://media-1.api-sports.io/flags/kr.svg"
     },

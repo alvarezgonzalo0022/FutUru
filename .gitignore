@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+generatedJsons
 
 # Editor directories and files
 .vscode/*
@@ -24,7 +25,3 @@ dist-ssr
 *.sw?
 
 env.js
-allPlayersApertura.js
-allPlayersClausura.js
-allFilteredPlayersApertura.js
-allFilteredPlayersClausura.js
